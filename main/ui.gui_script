@@ -1,0 +1,44 @@
+function init(self)
+	self.score = 0
+	sound.play("/map#sound_bg")
+	msg.post(".", "acquire_input_focus")
+	self.game_over = false
+end
+
+function final(self)
+	-- Add finalization code here
+	-- Learn more: https://defold.com/manuals/script/
+	-- Remove this function if not needed
+end
+
+function update(self, dt)
+	-- Add update code here
+	-- Learn more: https://defold.com/manuals/script/
+	-- Remove this function if not needed
+end
+
+function on_message(self, message_id, message, sender)
+	if message_id == hash("add_score") then
+		self.score = self.score + message.score
+		local score_node = gui.get_node("score")
+		gui.set_text(score_node, "SCORE: " .. self.score)
+	end
+	if message_id == hash("game_over") then
+		local lose_node = gui.get_node("lose")
+		gui.set_visible(lose_node, true)
+		self.game_over = true
+	end
+end
+
+function on_input(self, action_id, action)
+	if action_id == hash("enter") and self.game_over then
+		msg.post("main:/loader", "restart")
+	end
+		
+end
+
+function on_reload(self)
+	-- Add reload-handling code here
+	-- Learn more: https://defold.com/manuals/hot-reload/
+	-- Remove this function if not needed
+end

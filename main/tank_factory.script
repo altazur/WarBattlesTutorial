@@ -1,0 +1,61 @@
+function init(self)
+	self.max_tanks = 3
+	self.spawned_tanks = {} -- Max number of tanks on scene
+	self.max_x = 640
+	self.max_y = 370
+end
+
+function final(self)
+	-- Add finalization code here
+	-- Learn more: https://defold.com/manuals/script/
+	-- Remove this function if not needed
+end
+
+function update(self, dt)
+	if table.maxn(self.spawned_tanks) < self.max_tanks then
+		--local pos = vmath.vector3(math.random(0, self.max_x), math.random(0, self.max_y), 1)
+		local pos = vmath.vector3(650, math.random(0, self.max_y), 1)
+		local id = factory.create("#factory", pos)
+		table.insert(self.spawned_tanks, id)
+	end
+end
+
+function fixed_update(self, dt)
+	-- Add update code here
+	-- Learn more: https://defold.com/manuals/script/
+	-- Remove this function if not needed
+end
+
+local function get_id_pos (self, id)
+	for id = 0, table.maxn(self.spawned_tanks), 1
+	do
+		if self.spawned_tanks[id] == id then
+			return id
+		end
+	end
+end
+
+function on_message(self, message_id, message, sender)
+	if message_id == hash("destroyed") then
+		print(self.spawned_tanks)
+		table.remove(self.spawned_tanks, get_id_pos(self, message))
+	end
+end
+
+function on_input(self, action_id, action)
+	-- Add input-handling code here. The game object this script is attached to
+	-- must have acquired input focus:
+	--
+	--    msg.post(".", "acquire_input_focus")
+	--
+	-- All mapped input bindings will be received. Mouse and touch input will
+	-- be received regardless of where on the screen it happened.
+	-- Learn more: https://defold.com/manuals/input/
+	-- Remove this function if not needed
+end
+
+function on_reload(self)
+	-- Add reload-handling code here
+	-- Learn more: https://defold.com/manuals/hot-reload/
+	-- Remove this function if not needed
+end
